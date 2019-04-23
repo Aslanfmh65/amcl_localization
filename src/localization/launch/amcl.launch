@@ -4,6 +4,8 @@
    <arg name="map_file" default="$(find localization)/maps/aslan.yaml"/>
    <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" />
 
+   <!--<node pkg="tf" type="static_transform_publisher" name="map_odom_broadcaster" args="0 0 0 0 0 0 map odom 100"/>-->
+
    <!-- AMCL Node, Taking LiDAR data into AMCL Algorithm -->
    <node name="amcl" pkg="amcl" type="amcl" output="screen">
 
@@ -12,6 +14,27 @@
       <param name="odom_model_type" value="diff-corrected"/>
       <param name="base_frame_id" value="robot_footprint"/>
       <param name="global_frame_id" value="map"/>
+
+      <!-- Overall Filters -->
+      <!-- Initial Position -->
+      <param name="initial_pose_x" value="0.0"/>
+      <param name="initial_pose_y" value="0.0"/>
+
+      <!-- Particles Number -->
+      <param name="min_particles" value="300"/>
+      <param name="max_particles" value="3000"/>
+
+      <!-- Filter Update or Scan Data Discard -->
+      <!-- Frequent filter update is computationally expensive, while scan data discard may result in poor localization -->
+      <param name="update_min_d" value="0.1"/>
+      <param name="update_min_a" value="M_PI/6.0"/>
+
+      <!-- Laser Scan, Likelihood Field Model -->
+      <!-- The better the estimation of where the obstacles are, the better the localization results -->
+      <param name="laser_max_range" value="5.0"/>
+      <param name="laser_max_beams" value="35"/>
+      <param name="laser_z_hit" value="0.95"/>
+      <param name="laser_z_rand" value="0.05"/>
 
    </node>
 
